@@ -1,0 +1,20 @@
+Font 
+
+font-family: "SUSE", sans-serif;
+
+Icons
+
+remove item = <i class="fa-solid fa-square-xmark"></i>
+edit item = <i class="fa-solid fa-pencil"></i>
+list icon = <i class="fa-solid fa-list-check"></i>
+
+add item = <i class="fa-solid fa-square-plus"></i>
+           <i class="fa-regular fa-square-plus"></i>
+
+Colors 
+
+headings/ icons: #16423C
+outlines: #6A9C89
+supplementary: #C4DAD2, #E9EFEC, #DC6B19
+
+#F7C566
