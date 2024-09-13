@@ -133,7 +133,7 @@ function setItemToEdit(item) {
     itemList.querySelectorAll('li').forEach(item => item.classList.remove('edit-mode'));
     item.classList.add('edit-mode');
     formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>Update Item';
-    formBtn.style.backgroundColor = '#16423C';
+    formBtn.style.backgroundColor = '#78B7D0';
     itemInput.value = item.firstChild.textContent;
 }
 
@@ -186,7 +186,7 @@ function checkUI() {
         itemFilter.style.display = 'block';
     }
     formBtn.innerHTML = '<i class="fa-solid fa-plus"></i>Add Item';
-    formBtn.style.backgroundColor = '#6A9C89';
+    formBtn.style.backgroundColor = '#78B7D0';
     isEditMode = false;
 }
 
@@ -215,7 +215,7 @@ let placeholder = document.createElement('li');
 placeholder.className = "placeholder";
 placeholder.style.height = "40px"; // Fixed height for simplicity
 placeholder.style.backgroundColor = "#E9EFEC";
-placeholder.style.border = "2px dashed #DC6B19";
+placeholder.style.border = "2px dashed #E1D7B7";
 placeholder.style.margin = "8px";
 
 list.addEventListener("dragstart", function(e) {

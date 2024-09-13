@@ -13,8 +13,3 @@ add item = <i class="fa-solid fa-square-plus"></i>
 
 Colors 
 
-headings/ icons: #16423C
-outlines: #6A9C89
-supplementary: #C4DAD2, #E9EFEC, #DC6B19
-
-#F7C566
