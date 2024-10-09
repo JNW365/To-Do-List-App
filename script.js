@@ -133,7 +133,7 @@ function setItemToEdit(item) {
     itemList.querySelectorAll('li').forEach(item => item.classList.remove('edit-mode'));
     item.classList.add('edit-mode');
     formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>Update Item';
-    formBtn.style.backgroundColor = '#78B7D0';
+    formBtn.style.backgroundColor = '#388E3C';
     itemInput.value = item.firstChild.textContent;
 }
 
@@ -186,7 +186,7 @@ function checkUI() {
         itemFilter.style.display = 'block';
     }
     formBtn.innerHTML = '<i class="fa-solid fa-plus"></i>Add Item';
-    formBtn.style.backgroundColor = '#78B7D0';
+    formBtn.style.backgroundColor = '#388E3C';
     isEditMode = false;
 }
 
@@ -197,26 +197,27 @@ function init() {
     itemList.addEventListener('click', onClickItem);
     clearBtn.addEventListener('click', openModal);
     itemFilter.addEventListener('input', filterItems);
-    document.addEventListener('DOMContentLoaded', displayItems);
+    document.addEventListener('DOMContentLoaded', function() {
+        displayItems();  // Display existing items from local storage
+        restoreListOrder();  // Restore the order from localStorage
+    });
     checkUI();
 }
 
 init();
 
-// Draggable list 
+// Draggable list functionality
 
-
-// make items draggable
 const list = itemList;
 let draggedItem = null;
 let placeholder = document.createElement('li');
 
 // Style the placeholder
 placeholder.className = "placeholder";
-placeholder.style.height = "40px"; // Fixed height for simplicity
-placeholder.style.backgroundColor = "#E9EFEC";
-placeholder.style.border = "2px dashed #E1D7B7";
-placeholder.style.margin = "8px";
+placeholder.style.height = "30px"; 
+placeholder.style.backgroundColor = "#f0f0f0";
+placeholder.style.border = "2px solid #ccc";
+placeholder.style.margin = "5px";
 
 list.addEventListener("dragstart", function(e) {
     if (e.target && e.target.nodeName === "LI") {
@@ -235,6 +236,7 @@ list.addEventListener("dragend", function(e) {
             placeholder.parentNode.removeChild(placeholder);
         }
     }, 0);
+    saveListOrder();  // Save the order after every drag operation
 });
 
 list.addEventListener("dragover", function(e) {
@@ -250,64 +252,25 @@ list.addEventListener("dragover", function(e) {
         }
     }
 });
-// Function to handle touchmove for mobile devices
-function handleTouchMove(e) {
-    e.preventDefault();
-    let touch = e.touches[0];
-    let target = document.elementFromPoint(touch.clientX, touch.clientY);
 
-    if (target && target.nodeName === "LI" && target !== draggedItem) {
-        let targetRect = target.getBoundingClientRect();
-        let halfwayPoint = targetRect.top + targetRect.height / 2;
-
-        if (touch.clientY < halfwayPoint) {
-            list.insertBefore(placeholder, target);
-        } else {
-            list.insertBefore(placeholder, target.nextSibling);
-        }
-    }
-}
-// Handle touchstart (for mobile)
-list.addEventListener("touchstart", function(e) {
-    if (e.target && e.target.nodeName === "LI") {
-        draggedItem = e.target;
-        // draggedItem.style.display = "none";
-        list.addEventListener("touchmove", handleTouchMove);
-    }
-});
-
-// Handle touchend (for mobile)
-list.addEventListener("touchend", function(e) {
-    list.removeEventListener("touchmove", handleTouchMove);
-    if (draggedItem) {
-        list.insertBefore(draggedItem, placeholder);
-        draggedItem.style.display = "flex";
-        draggedItem = null;
-        if (placeholder.parentNode) {
-            placeholder.parentNode.removeChild(placeholder);
-        }
-    }
-});
-    
-// });
-//  preserve order of dragged items in list
 list.addEventListener("drop", function(e) {
     e.preventDefault();
     if (placeholder.parentNode) {
         list.insertBefore(draggedItem, placeholder);
         placeholder.parentNode.removeChild(placeholder);
-
-        // Capture the current order of list items
-        const items = list.querySelectorAll("li");
-        const order = Array.from(items).map(item => item.getAttribute('item-number'));
-
-        // Save the order to local storage
-        localStorage.setItem('listOrder', JSON.stringify(order));
+        saveListOrder(); // Save the order immediately
     }
 });
 
-// Retrieve the order
-document.addEventListener("DOMContentLoaded", function() {
+// Save the order
+function saveListOrder() {
+    const items = list.querySelectorAll("li");
+    const order = Array.from(items).map(item => item.getAttribute('item-number'));
+    localStorage.setItem('listOrder', JSON.stringify(order));
+}
+
+// Restore the order
+function restoreListOrder() {
     const savedOrder = JSON.parse(localStorage.getItem('listOrder'));
     if (savedOrder) {
         savedOrder.forEach(itemNumber => {
@@ -315,15 +278,16 @@ document.addEventListener("DOMContentLoaded", function() {
             list.appendChild(item);
         });
     }
-});
+}
 
 // Open Modal 
 let modal = document.getElementById('clear-items-modal');
 function openModal() {
     modal.style.display = 'block';
 }
+
 // Close modal after clicking cancel
-function removeModal() {
+function closeModal() {
     modal.style.display = 'none';
 }
-closeModal.addEventListener('click', removeModal);
+closeModal.addEventListener('click', closeModal);
